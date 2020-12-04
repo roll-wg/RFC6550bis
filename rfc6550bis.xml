@@ -3648,13 +3648,13 @@ present, as described below.
 
 <figure anchor='figtdo'> <name>Format of the RPL Target Descriptor Option</name>
 <artwork>
-  0                   1                   2                   3
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |   Type = 0x09 |Opt Length = 4 |           Descriptor
- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        Descriptor (cont.)       |
- +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x09 |Opt Length = 4 |           Descriptor
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+           Descriptor (cont.)       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -5350,10 +5350,10 @@ present, as described below.
 </t>
 
  <artwork>
-              {P1, P2} -> PC1 (11000000b) in the Path Control field
-              {P3}     -> PC2 (00110000b) in the Path Control field
-              {P4}     -> PC3 (00001100b) in the Path Control field
-              {P4}     -> PC4 (00000011b) in the Path Control field
+           {P1, P2} -> PC1 (11000000b) in the Path Control field
+           {P3}     -> PC2 (00110000b) in the Path Control field
+           {P4}     -> PC3 (00001100b) in the Path Control field
+           {P4}     -> PC4 (00000011b) in the Path Control field
 </artwork>
 
 <t>
@@ -5962,8 +5962,7 @@ present, as described below.
 <t>
    MACs and signatures are calculated over the entire unsecured IPv6
    packet.  When computing MACs and signatures, mutable IPv6 fields are
-   considered to be filled with zeroes, following the rules in Section
-   3.3.3.1 of <xref target="RFC4302"/> (IPsec Authenticated Header).  MAC and signature
+   considered to be filled with zeroes, following the rules in Section 3.3.3.1 of <xref target="RFC4302"/> (IPsec Authenticated Header).  MAC and signature
    calculations are performed before any compression that lower layers
    may apply.
 </t>
@@ -6086,9 +6085,7 @@ present, as described below.
    conjunction with a signature, because the signature provides
    sufficient data authentication.  Here, the CCM mode with M=0 is
    specified as in <xref target="RFC3610"/>, but where the M' field in Section 2.2 MUST
-   be set to 0.  It uses the SHA-256 hash function specified in Section
-   6.2 of <xref target="FIPS180"/>.  It uses the message encoding rules of Section 8.1
-   of <xref target="RFC3447"/>.
+   be set to 0.  It uses the SHA-256 hash function specified in Section 6.2 of <xref target="FIPS180"/>.  It uses the message encoding rules of Section 8.1 of <xref target="RFC3447"/>.
 </t>
 <t>
    Let 'a' be a concatenation of a 6-byte representation of counter and
@@ -9232,7 +9229,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node A, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Set</dd>
    <dt>'R' flag:</dt>       <dd>Clear</dd>
@@ -9245,7 +9242,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node B, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Set</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9260,7 +9257,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node C, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Set</dd>
    <dt>'R' flag:</dt>       <dd>Clear</dd>
@@ -9273,7 +9270,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node D, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Set</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9471,7 +9468,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node A, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Clear</dd>
@@ -9485,7 +9482,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node B, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9500,7 +9497,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node C, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Clear</dd>
@@ -9514,7 +9511,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node D, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9901,7 +9898,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node A, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9915,7 +9912,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node B, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9929,7 +9926,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node C, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>
@@ -9943,7 +9940,7 @@ is tracked with the following qualities:</t>
 <dl  newline="true" indent="0" spacing="normal">
 <dt>Node D, for example, will send DIO messages with a PIO as follows:</dt>
 <dd>
-   <dl  newline="false" indent="20" spacing="compact">
+   <dl  newline="false" indent="16" spacing="compact">
    <dt>'A' flag:</dt>       <dd>Set</dd>
    <dt>'L' flag:</dt>       <dd>Clear</dd>
    <dt>'R' flag:</dt>       <dd>Set</dd>

@@ -34,6 +34,13 @@
       </address>
     </author>
 
+    <author fullname="Tim Winter" initials="T" role="editor" surname="Winter">
+      <organization></organization>
+
+      <address>
+        <email>wintert@acm.org</email>
+      </address>
+    </author>
 
     <date/>
     <area>Routing Area</area>
@@ -159,7 +166,7 @@
    the validation of RPL routing states.  The RPL option <xref target='RFC6553'/> is an
    example of such mechanism.  The mechanism is required for all packets
    except when strict source routing is used (that is for packets going
-   Downward in Non-Storing mode as detailed further in <xref target='downr'/>), which
+   Downward in Non-Storing mode as detailed further in <xref target='DownwardRoutes'/>), which
    by nature prevents endless loops and alleviates the need for the RPL
    Packet Information.  Future companion specifications may propose
    alternate ways to carry the RPL Packet Information in the IPv6
@@ -172,7 +179,7 @@
    dynamically formed network topology.  This dissemination enables
    minimal configuration in the nodes, allowing nodes to operate mostly
    autonomously.  This mechanism uses Trickle <xref target='RFC6206'/> to optimize the
-   dissemination as described in <xref target='diot'/>.
+   dissemination as described in <xref target='DIOTransmission'/>.
 
 
 </t>
@@ -408,7 +415,7 @@
          <xref target='rplinst'/>).</dd>
    <dt>Global DODAG:</dt>
       <dd>A Global DODAG uses a global RPLInstanceID that may be
-         coordinated among several other nodes.  (See <xref target='rplinstid'/>).</dd>
+         coordinated among several other nodes.  (See <xref target='rplinst'/>).</dd>
    <dt>DIO:</dt>
       <dd>DODAG Information Object (see <xref target='dio'/>)</dd>
    <dt>DAO:</dt>
@@ -607,42 +614,44 @@
 
 <figure anchor='figrpli'> <name>RPL Instance</name>
 <artwork><![CDATA[
-     +----------------------------------------------------------------+
-     |                                                                |
-     | +--------------+                                               |
-     | |              |                                               |
-     | |     (R1)     |            (R2)                   (R3)        |
-     | |     /  \     |            /| \                  / |  \       |
-     | |    /    \    |           / |  \                /  |   \      |
-     | |  (A)    (B)  |         (C) |  (D)     ...    (F) (G)  (H)    |
-     | |  /|\     |\  |         /   | / |\             |\  |    |     |
-     | | : : :    : : |        :   (E)  : :            :  `:    :     |
-     | |              |            / \                                |
-     | +--------------+           :   :                               |
-     |      DODAG                                                     |
-     |                                                                |
-     +----------------------------------------------------------------+
+  +----------------------------------------------------------------+
+  |                                                                |
+  | +--------------+                                               |
+  | |              |                                               |
+  | |     (R1)     |            (R2)                   (R3)        |
+  | |     /  \     |            /| \                  / |  \       |
+  | |    /    \    |           / |  \                /  |   \      |
+  | |  (A)    (B)  |         (C) |  (D)     ...    (F) (G)  (H)    |
+  | |  /|\     |\  |         /   | / |\             |\  |    |     |
+  | | : : :    : : |        :   (E)  : :            :  `:    :     |
+  | |              |            / \                                |
+  | +--------------+           :   :                               |
+  |      DODAG                                                     |
+  |                                                                |
+  +----------------------------------------------------------------+
+                             RPL Instance
+
 ]]></artwork>
 </figure>
 
 <figure anchor='figdov'> <name>DODAG Version</name>
 <artwork><![CDATA[
-            +----------------+                +----------------+
-            |                |                |                |
-            |      (R1)      |                |      (R1)      |
-            |      /  \      |                |      /         |
-            |     /    \     |                |     /          |
-            |   (A)    (B)   |         \      |   (A)          |
-            |   /|\   / |\   |    ------\     |   /|\          |
-            |  : : (C)  : :  |           \    |  : : (C)       |
-            |                |           /    |        \       |
-            |                |    ------/     |         \      |
-            |                |         /      |         (B)    |
-            |                |                |          |\    |
-            |                |                |          : :   |
-            |                |                |                |
-            +----------------+                +----------------+
-                Version N                        Version N+1
+         +----------------+                +----------------+
+         |                |                |                |
+         |      (R1)      |                |      (R1)      |
+         |      /  \      |                |      /         |
+         |     /    \     |                |     /          |
+         |   (A)    (B)   |         \      |   (A)          |
+         |   /|\   / |\   |    ------\     |   /|\          |
+         |  : : (C)  : :  |           \    |  : : (C)       |
+         |                |           /    |        \       |
+         |                |    ------/     |         \      |
+         |                |         /      |         (B)    |
+         |                |                |          |\    |
+         |                |                |          : :   |
+         |                |                |                |
+         +----------------+                +----------------+
+             Version N                        Version N+1
 ]]></artwork>
 </figure>
 </section>
@@ -753,7 +762,7 @@
    necessary for a future companion specification to detail the
    mechanisms by which a node obtains/requests the authentication
    material (e.g., key, certificate) and to determine from where that
-   material should be obtained.  See also <xref target='instk'/>.
+   material should be obtained.  See also <xref target='InstallingKeys'/>.
 </t>
 
 </section>
@@ -890,7 +899,7 @@
    applications that require point-to-multipoint (P2MP) or point-to-
    point (P2P) traffic.  RPL supports two modes of Downward traffic:
    Storing (fully stateful) or Non-Storing (fully source routed); see
-   Section 9.  Any given RPL Instance is either storing or non-storing.
+   <xref target="DownwardRoutes"/>.  Any given RPL Instance is either storing or non-storing.
    In both cases, P2P packets travel Up toward a DODAG root then Down to
    the final destination (unless the destination is on the Upward
    route).  In the Non-Storing case, the packet will travel all the way
@@ -964,7 +973,7 @@
    The details of how the Objective Function computes Rank are out of
    scope for this specification, although that computation may depend,
    for example, on parents, link metrics, node metrics, and the node
-   configuration and policies.  See Section 14 for more information.
+   configuration and policies.  See <xref target="guideof"/> for more information.
 </t>
 <t>
    The Rank is not a path cost, although its value can be derived from
@@ -975,7 +984,7 @@
 
 <!-- Page 20 -->
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Type:</dt>
       <dd>The Rank is an abstract numeric value.</dd>
    <dt>Function:</dt>
@@ -1081,7 +1090,7 @@
    Rank computations maintain the following properties for any nodes M
    and N that are neighbors in the LLN:
 </t>
-<dl>
+<dl newline="true" indent="3">
   <dt>DAGRank(M) is less than DAGRank(N):</dt>
       <dd>In this case, the position of M is closer to the DODAG root than
       the position of N.  Node M may safely be a DODAG parent for Node N
@@ -1196,7 +1205,7 @@
    in <xref target='RFC6551'/>.
 </t>
 
-<dl>
+<dl newline="false" indent="11">
    <dt>Example 1:</dt>
        <dd>Shortest path: path offering the shortest end-to-end
               delay.</dd>
@@ -1260,17 +1269,17 @@
 
 <figure anchor='figgreed'> <name>Greedy DODAG Parent Selection</name>
  <artwork><![CDATA[
-         (A)                    (A)                    (A)
-          |\                     |\                     |\
-          | `------              | `------              | `------
-          |        \             |        \             |        \
-         (B)       (C)          (B)        \            |        (C)
-                                  \        |            |        /
-                                   `------ |            | .-----'
-                                          \|            |/
-                                          (C)          (B)
+      (A)                    (A)                    (A)
+       |\                     |\                     |\
+       | `-----.              | `-----.              | `-----.
+       |        \             |        \             |        \
+      (B)       (C)          (B)        \            |        (C)
+                               \        |            |        /
+                                `-----. |            | .-----'
+                                       \|            |/
+                                       (C)          (B)
 
-              -1-                    -2-                    -3-
+           -1-                    -2-                    -3-
 ]]></artwork>
 </figure>
 <t>
@@ -1383,7 +1392,7 @@
    acknowledge DAO messages, which may mitigate the impact of a single
    DAO message being missed.  RPL includes loop detection mechanisms
    that mitigate the impact of DAO loops and trigger their repair.  (See
-   <xref target='daoi'/>)
+   <xref target='daoi'/>).
 </t>
 
 </section>
@@ -1559,10 +1568,10 @@
 
 <figure anchor='figrplig'> <name>RPLInstanceID Field Format for Global Instances</name>
  <artwork>
-        0 1 2 3 4 5 6 7
-       +-+-+-+-+-+-+-+-+
-       |0|     ID      |  Global RPLInstanceID in 0..127
-       +-+-+-+-+-+-+-+-+
+     0 1 2 3 4 5 6 7
+    +-+-+-+-+-+-+-+-+
+    |0|     ID      |  Global RPLInstanceID in 0..127
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -1579,10 +1588,10 @@
 </t>
 <figure anchor='figrplil'> <name>RPLInstanceID Field Format for Local Instances</name>
  <artwork>
-        0 1 2 3 4 5 6 7
-       +-+-+-+-+-+-+-+-+
-       |1|D|   ID      |  Local RPLInstanceID in 0..63
-       +-+-+-+-+-+-+-+-+
+     0 1 2 3 4 5 6 7
+    +-+-+-+-+-+-+-+-+
+    |1|D|   ID      |  Local RPLInstanceID in 0..63
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -1647,19 +1656,19 @@
 </t>
 <figure anchor='figrplcm'> <name>RPL Control Message</name>
  <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                             Base                              .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                           Option(s)                           .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                             Base                              .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                           Option(s)                           .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -1676,25 +1685,25 @@
    (see <xref target="RPLCtrlCodeReg"/>)):
 
 </t>
-<dl>
-   <dt>0x00:</dt>
+<dl newline="false" indent="6">
+  <dt>*  0x00:</dt>
       <dd>DODAG Information Solicitation (<xref target='dis'/>)</dd>
-  <dt>0x01:</dt>
+  <dt>*  0x01:</dt>
       <dd>DODAG Information Object (<xref target='dio'/>)</dd>
-  <dt>0x02:</dt>
+  <dt>*  0x02:</dt>
       <dd>Destination Advertisement Object (<xref target='dao'/>)</dd>
-  <dt>0x03:</dt>
+  <dt>*  0x03:</dt>
       <dd>Destination Advertisement Object Acknowledgment
-      (<xref target='daoack'/></dd>
-  <dt>0x80:</dt>
+      (<xref target='daoack'/>)</dd>
+  <dt>*  0x80:</dt>
      <dd>Secure DODAG Information Solicitation (<xref target='sdis'/>)</dd>
-  <dt>0x81:</dt>
+  <dt>*  0x81:</dt>
      <dd>Secure DODAG Information Object (<xref target='sdio'/>)</dd>
-  <dt>0x82:</dt>
+  <dt>*  0x82:</dt>
      <dd>Secure Destination Advertisement Object (<xref target='sdao'/>)</dd>
-  <dt>0x83:</dt>
-     <dd>Secure Destination Advertisement Object Acknowledgment(<xref target='sdaoack'/>)</dd>
-  <dt>0x8A:</dt>
+  <dt>*  0x83:</dt>
+     <dd>Secure Destination Advertisement Object Acknowledgment (<xref target='sdaoack'/>)</dd>
+  <dt>*  0x8A:</dt>
      <dd>Consistency Check (<xref target='cc'/>)</dd>
 </dl>
 <t>
@@ -1720,23 +1729,23 @@
 
 <figure anchor='figrplscm'> <name>Secure RPL Control Message</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Type      |     Code      |          Checksum             |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                           Security                            .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                             Base                              .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                           Option(s)                           .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                           Security                            .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                             Base                              .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                           Option(s)                           .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -1768,17 +1777,17 @@
 
 <figure anchor='figsectsec'> <name>Security Section</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |T|  Reserved   |   Algorithm   |KIM|Resvd| LVL |     Flags     |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                            Counter                            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                        Key Identifier                         .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |T|  Reserved   |   Algorithm   |KIM|Resvd| LVL |     Flags     |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                            Counter                            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                        Key Identifier                         .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -1801,7 +1810,7 @@
         target="SecurityMechanisms" format="counter"></xref>.
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Counter is Time (T):</dt>
       <dd>If the counter's Time flag is set, then the
          Counter field is a timestamp.  If the flag is cleared, then the
@@ -1820,12 +1829,12 @@
 
 <figure anchor='figsecal'> <name>Security Algorithm (Algorithm) Encoding</name>
 <artwork><![CDATA[
-         +-----------+-------------------+------------------------+
-         | Algorithm |  Encryption/MAC   |        Signature       |
-         +-----------+-------------------+------------------------+
-         |     0     | CCM with AES-128  |      RSA with SHA-256  |
-         |   1-255   |    Unassigned     |        Unassigned      |
-         +-----------+-------------------+------------------------+
++-----------+-------------------+------------------------+
+| Algorithm |  Encryption/MAC   |        Signature       |
++-----------+-------------------+------------------------+
+|     0     | CCM with AES-128  |      RSA with SHA-256  |
+|   1-255   |    Unassigned     |        Unassigned      |
++-----------+-------------------+------------------------+
 ]]></artwork>
 </figure>
 
@@ -1846,42 +1855,42 @@
 
 <figure anchor='figkim'> <name>Key Identifier Mode (KIM) Encoding</name>
 <artwork><![CDATA[
-          +------+-----+-----------------------------+------------+
-          | Mode | KIM |           Meaning           |    Key     |
-          |      |     |                             | Identifier |
-          |      |     |                             |   Length   |
-          |      |     |                             |  (octets)  |
-          +------+-----+-----------------------------+------------+
-          |  0   | 00  | Group key used.             |     1      |
-          |      |     | Key determined by Key Index |            |
-          |      |     | field.                      |            |
-          |      |     |                             |            |
-          |      |     | Key Source is not present.  |            |
-          |      |     | Key Index is present.       |            |
-          +------+-----+-----------------------------+------------+
-          |  1   | 01  | Per-pair key used.          |     0      |
-          |      |     | Key determined by source    |            |
-          |      |     | and destination of packet.  |            |
-          |      |     |                             |            |
-          |      |     | Key Source is not present.  |            |
-          |      |     | Key Index is not present.   |            |
-          +------+-----+-----------------------------+------------+
-          |  2   | 10  | Group key used.             |     9      |
-          |      |     | Key determined by Key Index |            |
-          |      |     | and Key Source Identifier.  |            |
-          |      |     |                             |            |
-          |      |     | Key Source is present.      |            |
-          |      |     | Key Index is present.       |            |
-          +------+-----+-----------------------------+------------+
-          |  3   | 11  | Node's signature key used.  |    0/9     |
-          |      |     | If packet is encrypted,     |
-          |      |     | it uses a group key, Key    |            |
-          |      |     | Index and Key Source        |            |
-          |      |     | specify key.                |            |
-          |      |     |                             |            |
-          |      |     | Key Source may be present.  |            |
-          |      |     | Key Index may be present.   |            |
-          +------+-----+-----------------------------+------------+
+ +------+-----+-----------------------------+------------+
+ | Mode | KIM |           Meaning           |    Key     |
+ |      |     |                             | Identifier |
+ |      |     |                             |   Length   |
+ |      |     |                             |  (octets)  |
+ +------+-----+-----------------------------+------------+
+ |  0   | 00  | Group key used.             |     1      |
+ |      |     | Key determined by Key Index |            |
+ |      |     | field.                      |            |
+ |      |     |                             |            |
+ |      |     | Key Source is not present.  |            |
+ |      |     | Key Index is present.       |            |
+ +------+-----+-----------------------------+------------+
+ |  1   | 01  | Per-pair key used.          |     0      |
+ |      |     | Key determined by source    |            |
+ |      |     | and destination of packet.  |            |
+ |      |     |                             |            |
+ |      |     | Key Source is not present.  |            |
+ |      |     | Key Index is not present.   |            |
+ +------+-----+-----------------------------+------------+
+ |  2   | 10  | Group key used.             |     9      |
+ |      |     | Key determined by Key Index |            |
+ |      |     | and Key Source Identifier.  |            |
+ |      |     |                             |            |
+ |      |     | Key Source is present.      |            |
+ |      |     | Key Index is present.       |            |
+ +------+-----+-----------------------------+------------+
+ |  3   | 11  | Node's signature key used.  |    0/9     |
+ |      |     | If packet is encrypted,     |
+ |      |     | it uses a group key, Key    |            |
+ |      |     | Index and Key Source        |            |
+ |      |     | specify key.                |            |
+ |      |     |                             |            |
+ |      |     | Key Source may be present.  |            |
+ |      |     | Key Index may be present.   |            |
+ +------+-----+-----------------------------+------------+
 ]]></artwork>
 </figure>
 
@@ -1913,31 +1922,31 @@
 
 <figure anchor='LVLEncoding'> <name>Security Level (LVL) Encoding</name>
 <artwork><![CDATA[
-                      +---------------------------+
-                      |         KIM=0,1,2         |
-              +-------+--------------------+------+
-              |  LVL  |     Attributes     | MAC  |
-              |       |                    | Len  |
-              +-------+--------------------+------+
-              |   0   |       MAC-32       |  4   |
-              |   1   |     ENC-MAC-32     |  4   |
-              |   2   |       MAC-64       |  8   |
-              |   3   |     ENC-MAC-64     |  8   |
-              |  4-7  |     Unassigned     | N/A  |
-              +-------+--------------------+------+
+             +---------------------------+
+             |         KIM=0,1,2         |
+     +-------+--------------------+------+
+     |  LVL  |     Attributes     | MAC  |
+     |       |                    | Len  |
+     +-------+--------------------+------+
+     |   0   |       MAC-32       |  4   |
+     |   1   |     ENC-MAC-32     |  4   |
+     |   2   |       MAC-64       |  8   |
+     |   3   |     ENC-MAC-64     |  8   |
+     |  4-7  |     Unassigned     | N/A  |
+     +-------+--------------------+------+
 
-                            +---------------------+
-                            |        KIM=3        |
-                    +-------+---------------+-----+
-                    |  LVL  |  Attributes   | Sig |
-                    |       |               | Len |
-                    +-------+---------------+-----+
-                    |   0   |   Sign-3072   | 384 |
-                    |   1   | ENC-Sign-3072 | 384 |
-                    |   2   |   Sign-2048   | 256 |
-                    |   3   | ENC-Sign-2048 | 256 |
-                    |  4-7  |  Unassigned   | N/A |
-                    +-------+---------------+-----+
+                   +---------------------+
+                   |        KIM=3        |
+           +-------+---------------+-----+
+           |  LVL  |  Attributes   | Sig |
+           |       |               | Len |
+           +-------+---------------+-----+
+           |   0   |   Sign-3072   | 384 |
+           |   1   | ENC-Sign-3072 | 384 |
+           |   2   |   Sign-2048   | 256 |
+           |   3   | ENC-Sign-2048 | 256 |
+           |  4-7  |  Unassigned   | N/A |
+           +-------+---------------+-----+
 ]]></artwork>
 </figure>
 
@@ -1960,25 +1969,27 @@
          packet protection and allows for the provision of semantic
          security.  See <xref target='CCMNonce'/>.</dd>
    <dt> Key Identifier:</dt>
-      <dd><t>The Key Identifier field indicates which key was used
+      <dd>
+         <t>The Key Identifier field indicates which key was used
          to protect the packet.  This field provides various levels of
          granularity of packet protection, including peer-to-peer keys,
          group keys, and signature keys.  This field is represented as
          indicated by the Key Identifier Mode field and is formatted as
          follows:</t>
+
 <figure anchor='figki'> <name>Key Identifier</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                          Key Source                           .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                           Key Index                           .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+.                          Key Source                           .
+.                                                               .
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+.                           Key Index                           .
+.                                                               .
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
        </dd>
@@ -2013,21 +2024,21 @@
    solicit a DODAG Information Object from a RPL node.  Its use is
    analogous to that of a Router Solicitation as specified in IPv6
    Neighbor Discovery; a node may use DIS to probe its neighborhood for
-   nearby DODAGs.  Section 8.3 describes how nodes respond to a DIS.
+   nearby DODAGs. <xref target='DIOTransmission'/> describes how nodes respond to a DIS.
 </t>
 
 <section numbered="true" toc="default">
       <name>Format of the DIS Base Object</name>
 <figure anchor='figdiso'> <name>The DIS Base Object</name>
 <artwork>
-        0                   1                   2
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |     Flags     |   Reserved    |   Option(s)...
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Flags     |   Reserved    |   Option(s)...
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
-<dl>
+<dl newline="false" indent="6">
    <dt>Flags:  </dt>
       <dd>8-bit unused field reserved for flags.  The field MUST be
          initialized to zero by the sender and MUST be ignored by the
@@ -2070,14 +2081,12 @@
    This specification allows for the DIS message to carry the following
    options:
 </t>
-<dl spacing="compact">
-   <dt>0x00</dt>
-      <dd>Pad1 </dd>
-   <dt>0x01</dt>
-      <dd>PadN </dd>
-   <dt>0x07</dt>
-      <dd>Solicited Information </dd>
-</dl>
+
+<ul spacing="compact" bare="false" empty="true">
+   <li>0x00 Pad1</li>
+   <li>0x01 PadN</li>
+   <li>0x07 Solicited Information</li>
+</ul>
 </section>
     <!-- DIS Options -->
 
@@ -2105,26 +2114,26 @@
 
 <figure anchor='figdio'> <name>The DIO Base Object</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       | RPLInstanceID |Version Number |             Rank              |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |G|0| MOP | Prf |     DTSN      |     Flags     |   Reserved    |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            DODAGID                            +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Option(s)...
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | RPLInstanceID |Version Number |             Rank              |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |G|0| MOP | Prf |     DTSN      |     Flags     |   Reserved    |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            DODAGID                            +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Option(s)...
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
-<dl>
+<dl newline="false" indent="6">
    <dt>Grounded (G):</dt>
       <dd>The Grounded 'G' flag indicates whether the DODAG
          advertised can satisfy the application-defined goal.  If the
@@ -2143,19 +2152,19 @@
 
 <figure anchor='figmop'> <name>Mode of Operation (MOP) Encoding</name>
 <artwork><![CDATA[
-           +-----+-----------------------------------------------------+
-           | MOP | Description                                         |
-           +-----+-----------------------------------------------------+
-           |  0  | No Downward routes maintained by RPL                |
-           |  1  | Non-Storing Mode of Operation                       |
-           |  2  | Storing Mode of Operation with no multicast support |
-           |  3  | Storing Mode of Operation with multicast support    |
-           |     |                                                     |
-           |     | All other values are unassigned                     |
-           +-----+-----------------------------------------------------+
++-----+-----------------------------------------------------+
+| MOP | Description                                         |
++-----+-----------------------------------------------------+
+|  0  | No Downward routes maintained by RPL                |
+|  1  | Non-Storing Mode of Operation                       |
+|  2  | Storing Mode of Operation with no multicast support |
+|  3  | Storing Mode of Operation with multicast support    |
+|     |                                                     |
+|     | All other values are unassigned                     |
++-----+-----------------------------------------------------+
 
-   A value of 0 indicates that destination advertisement messages are
-   disabled and the DODAG maintains only Upward routes.
+A value of 0 indicates that destination advertisement messages are
+disabled and the DODAG maintains only Upward routes.
 ]]></artwork>
 </figure>
       </dd>
@@ -2239,20 +2248,14 @@
    This specification allows for the DIO message to carry the following
    options:
 </t>
-<dl spacing="compact">
-   <dt>0x00</dt>
-      <dd>Pad1 </dd>
-   <dt>0x01</dt>
-      <dd>PadN </dd>
-   <dt>0x02</dt>
-      <dd>DAG Metric Container </dd>
-   <dt>0x03</dt>
-      <dd>Routing Information </dd>
-   <dt>0x04</dt>
-      <dd>DODAG Configuration </dd>
-   <dt>0x08</dt>
-      <dd>Prefix Information </dd>
-</dl>
+<ul spacing="compact" bare="false" empty="true">
+   <li>0x00 Pad1 </li>
+   <li>0x01 PadN </li>
+   <li>0x02 DAG Metric Container </li>
+   <li>0x03 Routing Information </li>
+   <li>0x04 DODAG Configuration </li>
+   <li>0x08 Prefix Information </li>
+</ul>
 </section>
     <!-- DIO Options -->
 
@@ -2281,36 +2284,36 @@
 
 <figure anchor='figdao'> <name>The DAO Base Object</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       | RPLInstanceID |K|D|   Flags   |   Reserved    | DAOSequence   |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            DODAGID*                           +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Option(s)...
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | RPLInstanceID |K|D|   Flags   |   Reserved    | DAOSequence   |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            DODAGID*                           +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Option(s)...
+    +-+-+-+-+-+-+-+-+
 
-   The '*' denotes that the DODAGID is not always present, as described
-   below.
+The '*' denotes that the DODAGID is not always present, as described
+below.
 </artwork>
 </figure>
 
 
-<dl>
+<dl newline="false" indent="6">
    <dt>RPLInstanceID:</dt>
       <dd>8-bit field indicating the topology instance
          associated with the DODAG, as learned from the DIO.</dd>
 
    <dt>K:</dt>
       <dd>The 'K' flag indicates that the recipient is expected to send a
-         DAO-ACK back.  (See <xref target="daobr"/>)</dd>
+         DAO-ACK back.  (See <xref target="daobr"/>).</dd>
 
    <dt>D:</dt>
       <dd>The 'D' flag indicates that the DODAGID field is present.  This
@@ -2377,18 +2380,14 @@
    options:
 </t>
 
-<dl spacing="compact">
-   <dt>0x00</dt>
-      <dd>Pad1 </dd>
-   <dt>0x01</dt>
-      <dd>PadN </dd>
-   <dt>0x05</dt>
-      <dd>RPL Target </dd>
-   <dt>0x06</dt>
-      <dd>Transit Information </dd>
-   <dt>0x09</dt>
-      <dd>RPL Target Descriptor </dd>
-</dl>
+<ul spacing="compact" bare="false" empty="true">
+   <li>0x00 Pad1</li>
+   <li>0x01 PadN</li>
+   <li>0x05 RPL Target</li>
+   <li>0x06 Transit Information</li>
+   <li>0x09 RPL Target Descriptor</li>
+</ul>
+
 <t>
    A special case of the DAO message, termed a No-Path, is used in
    Storing mode to clear Downward routing state that has been
@@ -2423,28 +2422,28 @@
 
 <figure anchor='figdaoack'> <name>The DAO ACK Base Object</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       | RPLInstanceID |D|  Reserved   |  DAOSequence  |    Status     |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            DODAGID*                           +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Option(s)...
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | RPLInstanceID |D|  Reserved   |  DAOSequence  |    Status     |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            DODAGID*                           +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Option(s)...
+    +-+-+-+-+-+-+-+-+
 
-   The '*' denotes that the DODAGID is not always present, as described
-   below.
+The '*' denotes that the DODAGID is not always present, as described
+below.
 </artwork>
 </figure>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>RPLInstanceID:</dt>
       <dd>8-bit field indicating the topology instance
          associated with the DODAG, as learned from the DIO.</dd>
@@ -2470,23 +2469,23 @@
          defined in this specification, although status codes SHOULD be
          allocated according to the following guidelines in future
          specifications:</t>
-         <dl>
+         <dl newline="false" indent="6">
+
            <dt>0:</dt>
-                <dd>The 7-bit field, reserved for flags.
-                   Unqualified acceptance (i.e., the node receiving the
-                   DAO-ACK is not rejected).</dd>
+                <dd>Unqualified acceptance (i.e., the node receiving the
+               DAO-ACK is not rejected).</dd>
 
 <!-- Page 44 -->
 
 
            <dt>1-127:  </dt>
-             <dd> Not an outright rejection; the node sending the DAO-ACK
+             <dd>Not an outright rejection; the node sending the DAO-ACK
                is willing to act as a parent, but the receiving node is
                suggested to find and use an alternate parent instead.</dd>
 
            <dt>127-255:  </dt>
-             <dd> Rejection; the node sending the DAO-ACK is unwilling to
-               act as a parent.</dd>
+             <dd>Rejection; the node sending the DAO-ACK is unwilling to
+               act as a parent. </dd>
 
            </dl>
            </dd>
@@ -2554,27 +2553,27 @@
 
 <figure anchor='figcc'> <name>The CC Base Object</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       | RPLInstanceID |R|    Flags    |           CC Nonce            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            DODAGID                            +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                      Destination Counter                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Option(s)...
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | RPLInstanceID |R|    Flags    |           CC Nonce            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            DODAGID                            +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                      Destination Counter                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Option(s)...
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>RPLInstanceID:</dt>
       <dd>8-bit field indicating the topology instance
          associated with the DODAG, as learned from the DIO.</dd>
@@ -2639,12 +2638,10 @@
    options:
 </t>
 
-<dl spacing="compact">
-   <dt>0x00</dt>
-      <dd>Pad1 </dd>
-   <dt>0x01</dt>
-      <dd>PadN </dd>
-</dl>
+<ul spacing="compact" bare="false" empty="true">
+   <li>0x00 Pad1 </li>
+   <li>0x01 PadN </li>
+</ul>
 
 </section>
     <!-- CC Options -->
@@ -2669,15 +2666,15 @@
 
 <figure anchor='figrplopt'> <name>RPL Option Generic Format</name>
 <artwork>
-        0                   1                   2
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
-       |  Option Type  | Option Length | Option Data
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+     0                   1                   2
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+    |  Option Type  | Option Length | Option Data
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
 </artwork>
 </figure>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>8-bit identifier of the type of option.  The Option Type
          values are assigned by IANA (see
@@ -2731,11 +2728,11 @@
 
 <figure anchor='figpad1'> <name>Format of the Pad1 Option</name>
 <artwork>
-        0
-        0 1 2 3 4 5 6 7
-       +-+-+-+-+-+-+-+-+
-       |   Type = 0x00 |
-       +-+-+-+-+-+-+-+-+
+     0
+     0 1 2 3 4 5 6 7
+    +-+-+-+-+-+-+-+-+
+    |   Type = 0x00 |
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -2764,11 +2761,11 @@
 
 <figure anchor='figpadn'> <name>Format of the Pad N Option</name>
 <artwork>
-        0                   1                   2
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
-       |   Type = 0x01 | Option Length | 0x00 Padding...
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+     0                   1                   2
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+    |   Type = 0x01 | Option Length | 0x00 Padding...
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
 </artwork>
 </figure>
 
@@ -2781,7 +2778,7 @@
 </t>
 
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x01 </dd>
 
@@ -2815,11 +2812,11 @@
 
 <figure anchor='figmco'> <name>Format of the DAG Metric Container Option</name>
 <artwork>
-        0                   1                   2
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
-       |   Type = 0x02 | Option Length | Metric Data
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+     0                   1                   2
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
+    |   Type = 0x02 | Option Length | Metric Data
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - -
 </artwork>
 </figure>
 
@@ -2840,7 +2837,7 @@
    governed by implementation specific policy functions.
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x02</dd>
 
@@ -2882,17 +2879,17 @@
 </t>
 <figure anchor='figrio'> <name>Format of the Route Information Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x03 | Option Length | Prefix Length |Resvd|Prf|Resvd|
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                        Route Lifetime                         |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       .                   Prefix (Variable Length)                    .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x03 | Option Length | Prefix Length |Resvd|Prf|Resvd|
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                        Route Lifetime                         |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    .                   Prefix (Variable Length)                    .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -2911,7 +2908,7 @@
 </t>
 
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x03 </dd>
 
@@ -2982,17 +2979,17 @@
 </t>
 <figure anchor='figdco'> <name>Format of the DODAG Configuration Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x04 |Opt Length = 14| Flags |A| PCS | DIOIntDoubl.  |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |  DIOIntMin.   |   DIORedun.   |        MaxRankIncrease        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |      MinHopRankIncrease       |              OCP              |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Reserved    | Def. Lifetime |      Lifetime Unit            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x04 |Opt Length = 14| Flags |A| PCS | DIOIntDoubl.  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |  DIOIntMin.   |   DIORedun.   |        MaxRankIncrease        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |      MinHopRankIncrease       |              OCP              |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Reserved    | Def. Lifetime |      Lifetime Unit            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -3012,7 +3009,7 @@
    unicast DODAG Information Solicitation (DIS) message.
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x04</dd>
 
@@ -3036,7 +3033,7 @@
    <dt>Path Control Size (PCS):</dt>
       <dd>3-bit unsigned integer used to configure the
          number of bits that may be allocated to the Path Control field
-         (see Section 9.9).  Note that when PCS is consulted to
+         (see <xref target="PathControl"/>).  Note that when PCS is consulted to
          determine the width of the Path Control field, a value of 1 is
          added, i.e., a PCS value of 0 results in 1 active bit in the
          Path Control field.  The default value of PCS is
@@ -3044,18 +3041,18 @@
 
    <dt>DIOIntervalDoublings:</dt>
       <dd>8-bit unsigned integer used to configure Imax
-         of the DIO Trickle timer (see Section 8.3.1).  The default
+         of the DIO Trickle timer (see <xref target="TrickleParameters"/>).  The default
          value of DIOIntervalDoublings is
          DEFAULT_DIO_INTERVAL_DOUBLINGS.</dd>
 
    <dt>DIOIntervalMin:</dt>
       <dd>8-bit unsigned integer used to configure Imin of the
-         DIO Trickle timer (see Section 8.3.1).  The default value of
+         DIO Trickle timer (see <xref target="TrickleParameters"/>).  The default value of
          DIOIntervalMin is DEFAULT_DIO_INTERVAL_MIN.</dd>
 
    <dt>DIORedundancyConstant:</dt>
       <dd>8-bit unsigned integer used to configure k of
-         the DIO Trickle timer (see Section 8.3.1).  The default value
+         the DIO Trickle timer (see <xref target="TrickleParameters"/>).  The default value
          of DIORedundancyConstant is DEFAULT_DIO_REDUNDANCY_CONSTANT.</dd>
 
    <dt>MaxRankIncrease:</dt>
@@ -3066,7 +3063,7 @@
 
    <dt>MinHopRankIncrease:</dt>
       <dd>16-bit unsigned integer used to configure
-         MinHopRankIncrease as described in Section 3.5.1.  The default
+         MinHopRankIncrease as described in <xref target="rankcomp"/>.  The default
          value of MinHopRankInc is DEFAULT_MIN_HOP_RANK_INCREASE.</dd>
 
    <dt>Objective Code Point (OCP):</dt>
@@ -3104,17 +3101,17 @@
 </t>
 <figure anchor='figrto'> <name>Format of the RPL Target Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x05 | Option Length |     Flags     | Prefix Length |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                Target Prefix (Variable Length)                |
-       .                                                               .
-       .                                                               .
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x05 | Option Length |     Flags     | Prefix Length |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                Target Prefix (Variable Length)                |
+    .                                                               .
+    .                                                               .
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -3140,7 +3137,7 @@
    multiple targets.
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x05</dd>
 
@@ -3184,25 +3181,25 @@
 
 <figure anchor='figtio'> <name>Format of the Transit Information Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x06 | Option Length |E|    Flags    | Path Control  |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       | Path Sequence | Path Lifetime |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                        Parent Address*                        +
-       |                                                               |
-       +                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x06 | Option Length |E|    Flags    | Path Control  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | Path Sequence | Path Lifetime |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                        Parent Address*                        +
+    |                                                               |
+    +                               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
-   The '*' denotes that the DODAG Parent Address subfield is not always
-   present, as described below.
+The '*' denotes that the DODAG Parent Address subfield is not always
+present, as described below.
 </artwork>
 </figure>
 
@@ -3242,7 +3239,7 @@
    indicates the child node, and the Transit Information option(s)
    enumerates the DODAG parents.  The structure of the DAO message,
    further detailing how Target options are used in conjunction with
-   Transit Information options, is further described in Section 9.4.
+   Transit Information options, is further described in <xref target="sodao"/>.
 </t>
 <t>
    A typical non-storing node will use multiple Transit Information
@@ -3266,7 +3263,7 @@
    forward that DAO message through one of the DODAG parents: P1, P2, or
    P3.
 </t>
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x06</dd>
 
@@ -3310,12 +3307,12 @@
          </t>
          <figure anchor='figsubenc'>
             <name>Path Control Preference Subfield Encoding</name>
-            <artwork>
-                                 0 1 2 3 4 5 6 7
-                                +-+-+-+-+-+-+-+-+
-                                |PC1|PC2|PC3|PC4|
-                                +-+-+-+-+-+-+-+-+
-            </artwork>
+         <artwork>
+                        0 1 2 3 4 5 6 7
+                       +-+-+-+-+-+-+-+-+
+                       |PC1|PC2|PC3|PC4|
+                       +-+-+-+-+-+-+-+-+
+         </artwork>
          </figure>
 
       </dd>
@@ -3369,21 +3366,21 @@
 </t>
 <figure anchor='figsio'> <name>Format of the Solicited Information Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x07 |Opt Length = 19| RPLInstanceID |V|I|D|  Flags  |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            DODAGID                            +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |Version Number |
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x07 |Opt Length = 19| RPLInstanceID |V|I|D|  Flags  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            DODAGID                            +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |Version Number |
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -3394,7 +3391,7 @@
    matched by a receiving node.  This is used by the requester to limit
    the number of replies from "non-interesting" nodes.  These predicates
    affect whether a node resets its DIO Trickle timer, as described in
-   <xref target='diot'/>.
+   <xref target='DIOTransmission'/>.
 </t>
 <t>
    The Solicited Information option contains flags that indicate which
@@ -3408,7 +3405,7 @@
 
 <!-- Page 58 -->
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x07</dd>
 
@@ -3497,25 +3494,25 @@
 
 <figure anchor='figpio'> <name>Format of the Prefix Information Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x08 |Opt Length = 30| Prefix Length |L|A|R|Reserved1|
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                         Valid Lifetime                        |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                       Preferred Lifetime                      |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                           Reserved2                           |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +                            Prefix                             +
-       |                                                               |
-       +                                                               +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |   Type = 0x08 |Opt Length = 30| Prefix Length |L|A|R|Reserved1|
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Valid Lifetime                        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                       Preferred Lifetime                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Reserved2                           |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +                            Prefix                             +
+    |                                                               |
+    +                                                               +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -3529,7 +3526,7 @@
    reference with respect to the PIO.  The field descriptions are
    transcribed here for convenience:
 </t>
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x08</dd>
 
@@ -3651,13 +3648,13 @@
 
 <figure anchor='figtdo'> <name>Format of the RPL Target Descriptor Option</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |   Type = 0x09 |Opt Length = 4 |           Descriptor
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-              Descriptor (cont.)       |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |   Type = 0x09 |Opt Length = 4 |           Descriptor
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+        Descriptor (cont.)       |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
@@ -3672,7 +3669,7 @@
    the DODAG in DAO messages.
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Option Type:</dt>
       <dd>0x09</dd>
 
@@ -3699,7 +3696,7 @@
 
 
 
-<section anchor="seqnum" numbered="true" toc="default">
+<section anchor="SequenceCounters" numbered="true" toc="default">
       <name>Sequence Counters</name>
 
 <t>
@@ -3718,7 +3715,7 @@
    information:
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>DODAGVersionNumber:</dt>
       <dd>This sequence counter is present in the DIO Base
          to indicate the Version of the DODAG being formed.  The
@@ -3898,7 +3895,7 @@
 <t>
    A DIO message can also transport explicit routing information:
 </t>
-<dl>
+<dl newline="false" indent="6">
    <dt>DODAGID:</dt>
       <dd>The DODAGID is a Global or Unique Local IPv6 address of the
          root.  A node that joins a DODAG SHOULD provision a host route
@@ -3923,7 +3920,7 @@
          to favor a DODAG versus another one for the same instance.</dd>
 </dl>
 
-<section numbered="true" toc="default">
+<section anchor="DIOBaseRules" numbered="true" toc="default">
       <name>DIO Base Rules</name>
 
 <ol>
@@ -4065,20 +4062,20 @@
        advertise and thus move to a new DODAG Version.  When a DODAG
        root increments its DODAGVersionNumber, it MUST follow the
        conventions of Serial Number Arithmetic as described in
-       <xref target="seqnum"/>.  Events triggering the increment of the
+       <xref target="SequenceCounters"/>.  Events triggering the increment of the
        DODAGVersionNumber are described later in this section and in
        <xref target="mgt"/>.
    </li>
    <li>Within a given DODAG, a node that is a not a root MUST NOT
        advertise a DODAGVersionNumber higher than the highest
        DODAGVersionNumber it has heard.  Higher is defined as the
-       greater-than operator in <xref target="seqnum"/>.
+       greater-than operator in <xref target="SequenceCounters"/>.
    </li>
    <li>Once a node has advertised a DODAG Version by sending a DIO, it
        MUST NOT be a member of a previous DODAG Version of the same
        DODAG (i.e., with the same RPLInstanceID, the same DODAGID, and a
        lower DODAGVersionNumber).  Lower is defined as the less-than
-       operator in <xref target="seqnum"/>.
+       operator in <xref target="SequenceCounters"/>.
    </li>
 </ol>
 
@@ -4257,7 +4254,7 @@
 <t>
    If a node needs to move Down a DODAG that it is attached to,
    increasing its Rank, then it MAY poison its routes and delay before
-   moving as described in Section <xref target="poison"/>.
+   moving as described in <xref target="poison"/>.
 </t>
 <t>
    A node is allowed to join any DODAG Version that it has never been a
@@ -4371,7 +4368,7 @@
        eligible for further processing and a node MUST silently discard
        it.  (See <xref target="mgt"/> for error logging).
    </li>
-   <li>IfIf the sender of the DIO message is a member of the candidate
+   <li>If the sender of the DIO message is a member of the candidate
        neighbor set and the DIO message is not malformed, the node MUST
        process the DIO.
    </li>
@@ -4412,7 +4409,7 @@
 
 
 
-<section anchor='diot' numbered="true" toc="default">
+<section anchor='DIOTransmission' numbered="true" toc="default">
       <name>DIO Transmission</name>
 
 <t>
@@ -4469,7 +4466,7 @@
    The configuration parameters of the Trickle timer are specified as
    follows:
 </t>
-<dl>
+<dl newline="false" indent="6">
    <dt>Imin:</dt>
       <dd>learned from the DIO message as (2^DIOIntervalMin) ms.  The
          default value of DIOIntervalMin is DEFAULT_DIO_INTERVAL_MIN.</dd>
@@ -4527,9 +4524,9 @@
   In some cases, a RPL node may attach to a DODAG as a leaf node only.
    One example of such a case is when a node does not understand or does
    not support (policy) the RPL Instance's OF or advertised metric/
-   constraint.  As specified in Section 18.6, related to policy
+   constraint.  As specified in <xref target="Policy"/>, related to policy
    function, the node may either join the DODAG as a leaf node or may
-   not join the DODAG.  As mentioned in Section 18.5, it is then
+   not join the DODAG.  As mentioned in <xref target="fault"/>, it is then
    recommended to log a fault.
 </t>
 
@@ -4555,10 +4552,10 @@
        being forwarded or in response to a unicast DIS message, in which
        case the DIO transmission MUST NOT be suppressed.
    </li>
-   <li>It MAY transmit unicast DAOs as described in Section 9.2.
+   <li>It MAY transmit unicast DAOs as described in <xref target="DownwardRouteDiscovery"/>.
    </li>
    <li>It MAY transmit multicast DAOs to the '1 hop' neighborhood as
-       described in Section 9.10.
+       described in <xref target="MulticastDestination"/>.
    </li>
 </ol>
 
@@ -4678,7 +4675,7 @@
 
 
 
-<section numbered="true" toc="default">
+<section anchor="DownwardRouteDiscovery" numbered="true" toc="default">
       <name>Downward Route Discovery and Maintenance</name>
 
 
@@ -4694,15 +4691,15 @@
        as a router, e.g., that do not match the advertised MOP, MAY join
        the DODAG as a leaf.
    </li>
-   <li>AIf the MOP is 0, indicating no Downward routing, nodes MUST NOT
+   <li>If the MOP is 0, indicating no Downward routing, nodes MUST NOT
        transmit DAO messages and MAY ignore DAO messages.
    </li>
-   <li>AIn Non-Storing mode, the DODAG root SHOULD store source routing
+   <li>In Non-Storing mode, the DODAG root SHOULD store source routing
        table entries for destinations learned from DAOs.  The DODAG root
        MUST be able to generate source routes for those destinations
        learned from DAOs that were stored.
    </li>
-   <li>AIn Storing mode, all non-root, non-leaf nodes MUST store routing
+   <li>In Storing mode, all non-root, non-leaf nodes MUST store routing
        table entries for destinations learned from DAOs.
    </li>
 </ol>
@@ -4757,7 +4754,7 @@
    DAO messages subsequently propagates Up the DODAG.  The Path Sequence
    counter in the Transit information option is used to indicate
    freshness and update stale Downward routing information as described
-   in <xref target="seqnum"/>.
+   in <xref target="SequenceCounters"/>.
 </t>
 <t>
    For a Target that is associated with (owned by) a node, that node
@@ -4919,7 +4916,7 @@
        for that Target, MUST use the Path Sequence number in the Transit
        Information option associated with that Target in order to
        determine whether or not the DAO message contains updated
-       information per Section 7.
+       information per <xref target="SequenceCounters"/>.
    </li>
    <li>If a node receives a DAO message that does not follow the above
        rules, it MUST discard the DAO message without further
@@ -5230,7 +5227,7 @@
 
 
 
-<section numbered="true" toc="default">
+<section anchor="PathControl" numbered="true" toc="default">
       <name>Path Control</name>
 
 <t>
@@ -5244,7 +5241,7 @@
    of a Transit Information option as follows:
 </t>
 
-<ol>
+<ol indent="4">
    <li>The bit width of the Path Control field MUST be equal to the
        value (PCS + 1), where PCS is specified in the control field of
        the DODAG Configuration option.  Bits greater than or equal to
@@ -5429,7 +5426,7 @@
 
 
 
-<section numbered="true" toc="default">
+<section anchor="MulticastDestination" numbered="true" toc="default">
       <name>Multicast Destination Advertisement Messages</name>
 
 <t>
@@ -5541,7 +5538,7 @@
       mode cannot be supported by symmetric algorithms.  As of the
       writing of this specification, RPL supports only symmetric
       algorithms: authenticated mode is included for the benefit of
-      potential future cryptographic primitives.  See Section 10.3.
+      potential future cryptographic primitives.  See <xref target='InstallingKeys'/>.
    </li>
 </ul>
 
@@ -5581,7 +5578,7 @@
    has been pre-configured with a shared key for communicating with
    neighbors and the RPL root.  To join a secure RPL network, a node
    either listens for secure DIOs or triggers secure DIOs by sending a
-   secure DIS.  In addition to the DIO/DIS rules in Section 8, secure
+   secure DIS.  In addition to the DIO/DIS rules in <xref target='UpwardRoutes'/>, secure
    DIO and DIS messages have these rules:
 </t>
 
@@ -5592,7 +5589,7 @@
        0x00).
    </li>
    <li>When a node resets its Trickle timer in response to a secure DIS
-       (Section 8.3), the next DIO it transmits MUST be a secure DIO
+       (<xref target='DIOTransmission'/>), the next DIO it transmits MUST be a secure DIO
        with the same security configuration as the secure DIS.  If a
 
 <!-- Page 91 -->
@@ -5602,7 +5599,7 @@
        the last DIS to which it is responding.
    </li>
    <li>When a node sends a DIO in response to a unicast secure DIS
-       (Section 8.3), the DIO MUST be a secure DIO.
+       (<xref target='DIOTransmission'/>), the DIO MUST be a secure DIO.
    </li>
 </ol>
 
@@ -5650,7 +5647,7 @@
 
 
 
-<section anchor='instk' numbered="true" toc="default">
+<section anchor='InstallingKeys' numbered="true" toc="default">
       <name>Installing Keys</name>
 
 <t>
@@ -5749,7 +5746,7 @@
 <t>
    If a node supports such timestamps and it receives a message with the
    'T' flag set, it MAY apply the temporal check on the received message
-   described in Section 10.7.1.  If a node receives a message without
+   described in <xref target='TimestampKeyChecks'/>.  If a node receives a message without
    the 'T' flag set, it MUST NOT apply this temporal check.  A node's
    security policy MAY, for application reasons, include rejecting all
    messages without the 'T' flag set.
@@ -5933,7 +5930,7 @@
    replay, or delay checks.
 </t>
 
-<section numbered="true" toc="default">
+<section anchor="TimestampKeyChecks" numbered="true" toc="default">
       <name>Timestamp Key Checks</name>
 
 <t>
@@ -6018,22 +6015,22 @@
 </t>
 <figure anchor='figccmn'> <name>CCM Nonce</name>
 <artwork>
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                                                               |
-       +                       Source Identifier                       +
-       |                                                               |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |                            Counter                            |
-       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-       |KIM|Resvd| LVL |
-       +-+-+-+-+-+-+-+-+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                       Source Identifier                       +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                            Counter                            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |KIM|Resvd| LVL |
+    +-+-+-+-+-+-+-+-+
 </artwork>
 </figure>
 
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Source Identifier:</dt>
       <dd>8 bytes.  Source Identifier is set to the logical
          identifier of the originator of the protected packet.</dd>
@@ -6080,7 +6077,7 @@
    node appends a signature to the data payload of the packet.  The
    Security Level (LVL) field describes the length of this signature.
    The signature scheme in RPL for Security Mode 3 is an instantiation
-   of the RSA algorithm (RSASSA-PSS) as defined in Section 8.1 of
+   of the RSA algorithm (RSASSA-PSS) as defined in <xref target='DIOBaseRules'/> of
    <xref target="RFC3447"/>.  As public key, it uses the pair (n,e), where n is a
    2048-bit or 3072-bit RSA modulus and where e=2^{16}+1.  It uses CCM
    mode <xref target="RFC3610"/> as the encryption scheme with M=0 (as a stream-
@@ -6170,7 +6167,7 @@
        node fails to forward the packet with that specified source
        route, then that packet should be dropped.  The node MAY log an
        error.  The node may send an ICMPv6 error in Source Routing
-       Header message to the source of the packet (see Section 20.18).
+       Header message to the source of the packet (see <xref target='ICMPv6ErrSrcRte'/>).
    </li>
    <li>If there is an entry in the routing table matching the
        destination that has been learned from a multicast destination
@@ -6240,7 +6237,7 @@
    The content of RPL Packet Information is defined as follows:
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Down 'O':</dt>
       <dd>1-bit flag indicating whether the packet is expected to
          progress Up or Down.  A router sets the 'O' flag when the
@@ -6341,12 +6338,12 @@
    receives a packet with either:
 </t>
 
-<ol>
+<ul>
    <li>the 'O' bit set (to Down) from a node of a higher Rank.
    </li>
    <li>the 'O' bit cleared (for Up) from a node of a lower Rank.
    </li>
-</ol>
+</ul>
 
 <!-- Page 102 -->
 
@@ -6999,7 +6996,7 @@
 <!-- Page 111 -->
 
    <li>How to obtain authentication material in support if authenticated
-      mode is used (Section 10.3).
+      mode is used (<xref target='InstallingKeys'/>).
    </li>
    <li>Details of operation over multiple simultaneous instances.
    </li>
@@ -7027,7 +7024,7 @@
    The following is a summary of RPL constants and variables:
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>BASE_RANK:</dt>
       <dd>This is the Rank for a virtual root that might be used to
          coordinate multiple roots.  BASE_RANK has a value of 0.</dd>
@@ -7347,7 +7344,8 @@
 
 
 <section numbered="true" toc="default">
-      <name>Protocol Parameters to Be Configured on Every Non-DODAG-Root</name>
+      <name>Protocol Parameters to Be Configured on Every Non-DODAG-Root
+            Router in the LLN</name>
 
 <t>
    A RPL implementation MUST allow configuring the Target prefix [DAO
@@ -7390,7 +7388,7 @@
    DODAG root and advertised in options carried in DIO messages.
 </t>
 <t>
-   As specified in <xref target="diot"/>, a RPL implementation makes use of
+   As specified in <xref target="DIOTransmission"/>, a RPL implementation makes use of
    Trickle timers to govern the sending of DIO messages.  The operation
    of the Trickle algorithm is determined by a set of configurable
    parameters, which MUST be configurable and that are then advertised
@@ -7489,7 +7487,7 @@
       <name>Configuration of RPL Parameters Related to Security Mechanisms </name>
 
 <t>
-   As described in Section 10, the security features described in this
+   As described in <xref target='SecurityMechanisms'/>, the security features described in this
    document are optional to implement and a given implementation may
    support a subset (including the empty set) of the described security
    features.
@@ -7545,7 +7543,7 @@
    variables:
 </t>
 
-<ul spacing="compact">
+<ul spacing="compact" bare="false" empty="true">
    <li>DEFAULT_PATH_CONTROL_SIZE</li>
    <li>DEFAULT_DIO_INTERVAL_MIN</li>
    <li>DEFAULT_DIO_INTERVAL_DOUBLINGS</li>
@@ -7950,7 +7948,7 @@
 
 <ul>
    <li>The node joins the DODAG as a leaf node as specified in
-      Section 8.5.
+      <xref target="operleaf"/>.
    </li>
    <li>The node does not join the DODAG.
    </li>
@@ -8010,7 +8008,7 @@
 <t>
    With regard to the impact in terms of traffic on the network, RPL has
    been designed to limit the control traffic thanks to mechanisms such
-   as Trickle timers (<xref target="diot"/>).  Thus, the impact of RPL on other
+   as Trickle timers (<xref target="DIOTransmission"/>).  Thus, the impact of RPL on other
    protocols should be extremely limited.
 </t>
 
@@ -8128,7 +8126,7 @@
    the following security services:
 </t>
 
-<dl>
+<dl newline="false" indent="6">
    <dt>Data confidentiality:</dt>
       <dd>Assurance that transmitted information is only
          disclosed to parties for which it is intended.</dd>
@@ -8920,9 +8918,10 @@ is tracked with the following qualities:</t>
    Patrick Wetterwald, Bryan Mclaughlin, Carlos J. Bernardos, Thomas
    Watteyne, Zach Shelby, Caroline Bontoux, Marco Molteni, Billy Moon,
    Jim Bound, Yanick Pouffary, Henning Rogge, and Arsalan Tavakoli, who
-
-</t><t>
-   RPL Security Design, found in Section 10, Section 19, and elsewhere
+   have provided useful design considerations to RPL.
+</t>
+<t>
+   RPL Security Design, found in <xref target='SecurityMechanisms'/>, <xref target='Security'/>, and elsewhere
    throughout the document, is primarily the contribution of the
    Security Design Team: Tzeta Tsao, Roger Alexander, Dave Ward, Philip
    Levis, Kris Pister, Rene Struik, and Adrian Farrel.
@@ -8942,14 +8941,98 @@ is tracked with the following qualities:</t>
       <name>Contributors</name>
 
 <artwork>
-Stephen Dawson-Haggerty
-UC Berkeley
-Soda Hall
-Berkeley, CA  94720
-USA
+   Roger K. Alexander
+   Cooper Power Systems
+   20201 Century Blvd., Suite 250
+   Germantown, MD  20874
+   USA
 
-EMail: stevedh@cs.berkeley.edu
+   Phone: +1 240 454 9817
+   EMail: roger.alexander@cooperindustries.com
 </artwork>
+
+<artwork>
+   Anders Brandt
+   Sigma Designs
+   Emdrupvej 26A, 1.
+   Copenhagen  DK-2100
+   Denmark
+
+   EMail: abr@sdesigns.dk
+</artwork>
+
+<artwork>
+   Stephen Dawson-Haggerty
+   UC Berkeley
+   Soda Hall
+   Berkeley, CA  94720
+   USA
+
+   EMail: stevedh@cs.berkeley.edu
+</artwork>
+
+<artwork>
+   Jonathan W. Hui
+   Arch Rock Corporation
+   501 2nd St., Suite 410
+   San Francisco, CA  94107
+   USA
+
+   EMail: jhui@archrock.com
+</artwork>
+
+
+<artwork>
+   Richard Kelsey
+   Ember Corporation
+   Boston, MA
+   USA
+
+   Phone: +1 617 951 1225
+   EMail: kelsey@ember.com
+</artwork>
+
+
+<artwork>
+   Philip Levis
+   Stanford University
+   358 Gates Hall, Stanford University
+   Stanford, CA  94305-9030
+   USA
+
+   EMail: pal@cs.stanford.edu
+</artwork>
+
+
+<artwork>
+   Kris Pister
+   Dust Networks
+   30695 Huntwood Ave.
+   Hayward, CA  94544
+   USA
+
+   EMail: kpister@dustnetworks.com
+</artwork>
+
+
+<artwork>
+   Rene Struik
+   Struik Security Consultancy
+
+   EMail: rstruik.ext@gmail.com
+</artwork>
+
+
+<artwork>
+   JP. Vasseur
+   Cisco Systems
+   11, Rue Camille Desmoulins
+   Issy Les Moulineaux  92782
+   France
+
+   EMail: jpv@cisco.com
+</artwork>
+
 
 </section>
     <!-- Contributors -->
@@ -9110,35 +9193,35 @@ EMail: stevedh@cs.berkeley.edu
 
 <figure anchor='Figure32'> <name>Storing Mode with Node-Owned Prefixes</name>
 <artwork><![CDATA[
-                              +-------------+
-                              |    Root     |
-                              |             |
-                              |   Node A    |
-                              |             |
-                              |    A::A     |
-                              +------+------+
-                                     |
-                                     |
-                                     |
-                              +------+------+
-                              |    A::B     |
-                              |             |
-                              |   Node B    |
-                              |             |
-                              |    B::B     |
-                              +------+------+
-                                     |
-                                     |
-                      .--------------+--------------.
-                     /                               \
-                    /                                 \
-            +------+------+                     +------+------+
-            |    B::C     |                     |    B::D     |
-            |             |                     |             |
-            |   Node C    |                     |   Node D    |
-            |             |                     |             |
-            |    C::C     |                     |    D::D     |
-            +-------------+                     +-------------+
+                           +-------------+
+                           |    Root     |
+                           |             |
+                           |   Node A    |
+                           |             |
+                           |    A::A     |
+                           +------+------+
+                                  |
+                                  |
+                                  |
+                           +------+------+
+                           |    A::B     |
+                           |             |
+                           |   Node B    |
+                           |             |
+                           |    B::B     |
+                           +------+------+
+                                  |
+                                  |
+                   .--------------+--------------.
+                  /                               \
+                 /                                 \
+         +------+------+                     +------+------+
+         |    B::C     |                     |    B::D     |
+         |             |                     |             |
+         |   Node C    |                     |   Node D    |
+         |             |                     |             |
+         |    C::C     |                     |    D::D     |
+         +-------------+                     +-------------+
 ]]></artwork>
 </figure>
 
@@ -9352,33 +9435,33 @@ EMail: stevedh@cs.berkeley.edu
 
 <figure anchor='Figure33'> <name>Storing Mode with Subnet-Wide Prefix</name>
 <artwork><![CDATA[
-                              +-------------+
-                              |    Root     |
-                              |             |
-                              |   Node A    |
-                              |    A::A     |
-                              |             |
-                              +------+------+
-                                     |
-                                     |
-                                     |
-                              +------+------+
-                              |             |
-                              |   Node B    |
-                              |    A::B     |
-                              |             |
-                              +------+------+
-                                     |
-                                     |
-                      .--------------+--------------.
-                     /                               \
-                    /                                 \
-            +------+------+                     +------+------+
-            |             |                     |             |
-            |   Node C    |                     |   Node D    |
-            |    A::C     |                     |    A::D     |
-            |             |                     |             |
-            +-------------+                     +-------------+
+                           +-------------+
+                           |    Root     |
+                           |             |
+                           |   Node A    |
+                           |    A::A     |
+                           |             |
+                           +------+------+
+                                  |
+                                  |
+                                  |
+                           +------+------+
+                           |             |
+                           |   Node B    |
+                           |    A::B     |
+                           |             |
+                           +------+------+
+                                  |
+                                  |
+                   .--------------+--------------.
+                  /                               \
+                 /                                 \
+         +------+------+                     +------+------+
+         |             |                     |             |
+         |   Node C    |                     |   Node D    |
+         |    A::C     |                     |    A::D     |
+         |             |                     |             |
+         +-------------+                     +-------------+
 ]]></artwork>
 </figure>
 
@@ -9505,7 +9588,7 @@ EMail: stevedh@cs.berkeley.edu
 <dl newline="true" indent="4">
 <dt>
    Node A will conceptually collect the following information into its
-   Routing Information Base (RIB):
+   RIB:
 </dt>
 
 <dd>
@@ -9528,7 +9611,7 @@ EMail: stevedh@cs.berkeley.edu
 
 <dd>
 <ul spacing="compact">
-   <li>::/0 via A's link loca</li>
+   <li>::/0 via A's link local</li>
    <li>A::B/128 connected</li>
    <li>A::C/128 via C's link local</li>
    <li>A::D/128 via D's link local</li>
@@ -9596,35 +9679,35 @@ EMail: stevedh@cs.berkeley.edu
 <figure anchor='Figure34' align="left"> <name>Non-Storing Mode with Node-Owned Prefixes
 </name>
 <artwork><![CDATA[
-                              +-------------+
-                              |    Root     |
-                              |             |
-                              |   Node A    |
-                              |             |
-                              |    A::A     |
-                              +------+------+
-                                     |
-                                     |
-                                     |
-                              +------+------+
-                              |    A::B     |
-                              |             |
-                              |   Node B    |
-                              |             |
-                              |    B::B     |
-                              +------+------+
-                                     |
-                                     |
-                      .--------------+--------------.
-                     /                               \
-                    /                                 \
-            +------+------+                     +------+------+
-            |    B::C     |                     |    B::D     |
-            |             |                     |             |
-            |   Node C    |                     |   Node D    |
-            |             |                     |             |
-            |    C::C     |                     |    D::D     |
-            +-------------+                     +-------------+
+                           +-------------+
+                           |    Root     |
+                           |             |
+                           |   Node A    |
+                           |             |
+                           |    A::A     |
+                           +------+------+
+                                  |
+                                  |
+                                  |
+                           +------+------+
+                           |    A::B     |
+                           |             |
+                           |   Node B    |
+                           |             |
+                           |    B::B     |
+                           +------+------+
+                                  |
+                                  |
+                   .--------------+--------------.
+                  /                               \
+                 /                                 \
+         +------+------+                     +------+------+
+         |    B::C     |                     |    B::D     |
+         |             |                     |             |
+         |   Node C    |                     |   Node D    |
+         |             |                     |             |
+         |    C::C     |                     |    D::D     |
+         +-------------+                     +-------------+
 ]]></artwork>
 </figure>
 
@@ -9782,33 +9865,33 @@ EMail: stevedh@cs.berkeley.edu
 
 <figure anchor='Figure35'> <name>Non-Storing Mode with Subnet-Wide Prefix</name>
 <artwork><![CDATA[
-                              +-------------+
-                              |    Root     |
-                              |             |
-                              |   Node A    |
-                              |    A::A     |
-                              |             |
-                              +------+------+
-                                     |
-                                     |
-                                     |
-                              +------+------+
-                              |             |
-                              |   Node B    |
-                              |    A::B     |
-                              |             |
-                              +------+------+
-                                     |
-                                     |
-                      .--------------+--------------.
-                     /                               \
-                    /                                 \
-            +------+------+                     +------+------+
-            |             |                     |             |
-            |   Node C    |                     |   Node D    |
-            |    A::C     |                     |    A::D     |
-            |             |                     |             |
-            +-------------+                     +-------------+
+                           +-------------+
+                           |    Root     |
+                           |             |
+                           |   Node A    |
+                           |    A::A     |
+                           |             |
+                           +------+------+
+                                  |
+                                  |
+                                  |
+                           +------+------+
+                           |             |
+                           |   Node B    |
+                           |    A::B     |
+                           |             |
+                           +------+------+
+                                  |
+                                  |
+                   .--------------+--------------.
+                  /                               \
+                 /                                 \
+         +------+------+                     +------+------+
+         |             |                     |             |
+         |   Node C    |                     |   Node D    |
+         |    A::C     |                     |    A::D     |
+         |             |                     |             |
+         +-------------+                     +-------------+
 ]]></artwork>
 </figure>
 
@@ -10017,25 +10100,25 @@ EMail: stevedh@cs.berkeley.edu
 
 <figure anchor='Figure36'> <name>Simple Network Example</name>
 <artwork><![CDATA[
-                          RPL Network        +-------------------+
-                           RPL::/64          |                   |
-                                             |     External      |
-              [RPL::Root]    (Root)----------+      Prefix       |
-                               |             |    EXT_1::/64     |
-                               |             |                   |
-                               |             +-------------------+
-                 [RPL::A]     (A)
-                               :
-                               :
-                               :
-                 [RPL::Y]     (Y)
-                               |             +-------------------+
-                               |             |                   |
-                               |             |     External      |
-                 [RPL::Z]     (Z)------------+      Prefix       |
-                               :             |    EXT_2::/64     |
-                               :             |                   |
-                               :             +-------------------+
+                       RPL Network        +-------------------+
+                        RPL::/64          |                   |
+                                          |     External      |
+           [RPL::Root]    (Root)----------+      Prefix       |
+                            |             |    EXT_1::/64     |
+                            |             |                   |
+                            |             +-------------------+
+              [RPL::A]     (A)
+                            :
+                            :
+                            :
+              [RPL::Y]     (Y)
+                            |             +-------------------+
+                            |             |                   |
+                            |             |     External      |
+              [RPL::Z]     (Z)------------+      Prefix       |
+                            :             |    EXT_2::/64     |
+                            :             |                   |
+                            :             +-------------------+
 ]]></artwork>
 </figure>
 
@@ -10733,7 +10816,7 @@ Table of Contents
    DODAG parent: A parent of a node within a DODAG is one of the
          immediate successors of the node on a path towards the DODAG
          root.  A DODAG parent's Rank is lower than the node's.  (See
-         Section 3.5.1).
+         <xref target="rankcomp"/>).
 
    Sub-DODAG: The sub-DODAG of a node is the set of other nodes whose
          paths to the DODAG root pass through that node.  Nodes in the
